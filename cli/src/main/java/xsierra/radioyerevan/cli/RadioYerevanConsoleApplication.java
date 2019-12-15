@@ -1,7 +1,7 @@
-package xsierra.radioyerevan;
+package xsierra.radioyerevan.cli;
 
-import xsierra.radioyerevan.printer.ConsoleJokePrinter;
-import xsierra.radioyerevan.printer.JokePrinter;
+import xsierra.radioyerevan.cli.printer.ConsoleJokePrinter;
+import xsierra.radioyerevan.cli.printer.JokePrinter;
 
 public class RadioYerevanConsoleApplication {
 

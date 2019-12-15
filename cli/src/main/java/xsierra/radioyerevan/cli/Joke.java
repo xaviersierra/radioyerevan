@@ -1,4 +1,4 @@
-package xsierra.radioyerevan;
+package xsierra.radioyerevan.cli;
 
 public class Joke {
 

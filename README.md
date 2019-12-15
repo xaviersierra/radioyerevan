@@ -1,2 +1,2 @@
 # radioyerevan
-A bot to tweet a random Radio Yerevan xsierra.radioyerevan.Joke everyday
+A bot to tweet a random Radio Yerevan xsierra.radioyerevan.cli.Joke everyday

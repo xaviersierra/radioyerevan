@@ -1,6 +1,6 @@
-package xsierra.radioyerevan.printer;
+package xsierra.radioyerevan.cli.printer;
 
-import xsierra.radioyerevan.Joke;
+import xsierra.radioyerevan.cli.Joke;
 
 public class ConsoleJokePrinter implements JokePrinter {
 
