@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>cli</module>
+        <module>twitterbot</module>
     </modules>
     <properties>
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
@@ -12,8 +13,8 @@
         <maven.compiler.release>11</maven.compiler.release>
         <junit.version>5.5.2</junit.version>
     </properties>
-    <groupId>xsierra</groupId>
-    <artifactId>radioyerevan</artifactId>
+    <groupId>xsierra.radioyerevan</groupId>
+    <artifactId>parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <build>

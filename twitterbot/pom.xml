@@ -8,8 +8,9 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
-    <artifactId>cli</artifactId>
+
+    <artifactId>twitterbot</artifactId>
+
     <build>
         <plugins>
             <plugin>
@@ -26,7 +27,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>xsierra.radioyerevan.cli.RadioYerevanConsoleApplication</mainClass>
+                                    <mainClass>xsierra.radioyerevan.twitterbot.TwitterBotApplication</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -35,4 +36,19 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>xsierra.radioyerevan</groupId>
+            <artifactId>cli</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+    </dependencies>
+
+
 </project>

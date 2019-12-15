@@ -1,2 +1,7 @@
-# radioyerevan
-A bot to tweet a random Radio Yerevan xsierra.radioyerevan.cli.Joke everyday
+# Radio Yerevan Jokes
+Radio Yerevan Jokes were during the soviet union. They are half forgotten now.
+
+#CLI
+Print in console a random Yerevan Joke
+
+
