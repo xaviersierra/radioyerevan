@@ -34,12 +34,20 @@ public class TweetSender implements JokeSender {
                     .setOAuthConsumerSecret(apiSecret)
                     .setOAuthAccessToken(accessToken)
                     .setOAuthAccessTokenSecret(accessTokenSecret);
+
             TwitterFactory tf = new TwitterFactory(cb.build());
             Twitter twitter = tf.getInstance();
-            var status = twitter.updateStatus(String.format(QUESTION_FORMAT, joke.getQuestion()));
-            StatusUpdate answer = new StatusUpdate(String.format(ANSWER_FORMAT, joke.getAnswer()));
-            answer.setInReplyToStatusId(status.getId());
-            twitter.updateStatus(answer);
+            var questionStatus = twitter.updateStatus(String.format(QUESTION_FORMAT, joke.getQuestion()));
+
+            var formattedAnswer = AnswerFormatter.formatAnswer(joke.getAnswer());
+            long lastStatusId = questionStatus.getId();
+
+            for(String partialAnswer: formattedAnswer){
+                StatusUpdate answer = new StatusUpdate(partialAnswer);
+                answer.setInReplyToStatusId(lastStatusId);
+                var answerStatus = twitter.updateStatus(answer);
+                lastStatusId = answerStatus.getId();
+            }
 
         } catch (TwitterException e) {
             throw new RuntimeException("Couldn't send tweet");

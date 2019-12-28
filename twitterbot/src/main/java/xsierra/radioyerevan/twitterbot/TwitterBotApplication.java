@@ -3,6 +3,8 @@ package xsierra.radioyerevan.twitterbot;
 import xsierra.radioyerevan.cli.JokeFinder;
 import xsierra.radioyerevan.cli.RandomJokeFinder;
 
+import java.util.Optional;
+
 public class TwitterBotApplication {
 
     private static final String CONSUMER_KEY = "CONSUMER_KEY";
@@ -13,13 +15,20 @@ public class TwitterBotApplication {
     private static final JokeFinder finder = new RandomJokeFinder();
 
     public static void main(String[] args){
-        String consumerKey = System.getenv(CONSUMER_KEY);
-        String consumerSecret = System.getenv(CONSUMER_SECRET);
-        String accessToken = System.getenv(ACCESS_TOKEN);
-        String accessTokenSecret = System.getenv(ACCESS_TOKEN_SECRET);
+        String consumerKey = getKey(CONSUMER_KEY);
+        String consumerSecret = getKey(CONSUMER_SECRET);
+        String accessToken = getKey(ACCESS_TOKEN);
+        String accessTokenSecret = getKey(ACCESS_TOKEN_SECRET);
 
         JokeSender sender = new TweetSender(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         sender.sendJoke(finder.findJoke());
+
+        System.out.println("Tweet sent!");
+    }
+
+    private static String getKey(String key){
+        return Optional.ofNullable(System.getenv(key))
+                .orElseThrow(() -> new IllegalArgumentException(key + " missing"));
     }
 
 }
