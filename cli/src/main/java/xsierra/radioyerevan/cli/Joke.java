@@ -2,9 +2,21 @@ package xsierra.radioyerevan.cli;
 
 public class Joke {
 
+    private int id;
+
     private String question;
 
     private String answer;
+
+    private int timesUsed;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getQuestion() {
         return question;
@@ -22,4 +34,11 @@ public class Joke {
         this.answer = answer;
     }
 
+    public int getTimesUsed() {
+        return timesUsed;
+    }
+
+    public void setTimesUsed(int timesUsed) {
+        this.timesUsed = timesUsed;
+    }
 }

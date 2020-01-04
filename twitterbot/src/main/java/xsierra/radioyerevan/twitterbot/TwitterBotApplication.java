@@ -1,5 +1,6 @@
 package xsierra.radioyerevan.twitterbot;
 
+import xsierra.radioyerevan.cli.Joke;
 import xsierra.radioyerevan.cli.JokeFinder;
 import xsierra.radioyerevan.cli.RandomJokeFinder;
 
@@ -21,9 +22,10 @@ public class TwitterBotApplication {
         String accessTokenSecret = getKey(ACCESS_TOKEN_SECRET);
 
         JokeSender sender = new TweetSender(consumerKey, consumerSecret, accessToken, accessTokenSecret);
-        sender.sendJoke(finder.findJoke());
-
+        Joke joke = finder.findJoke();
+        sender.sendJoke(joke);
         System.out.println("Tweet sent!");
+        finder.useJoke(joke);
     }
 
     private static String getKey(String key){

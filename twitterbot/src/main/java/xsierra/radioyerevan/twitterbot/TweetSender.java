@@ -10,7 +10,6 @@ import xsierra.radioyerevan.cli.Joke;
 public class TweetSender implements JokeSender {
 
     private static final String QUESTION_FORMAT = "Radio Yerevan were asked: %s";
-    private static final String ANSWER_FORMAT = "Radio Yerevan answered: %s";
 
     private String apiKey;
     private String apiSecret;
