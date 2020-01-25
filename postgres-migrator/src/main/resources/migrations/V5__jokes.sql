@@ -1,0 +1,1 @@
+CREATE INDEX jokes_used ON jokes USING btree (times_used);

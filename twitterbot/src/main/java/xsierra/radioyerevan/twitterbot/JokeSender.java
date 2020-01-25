@@ -1,6 +1,6 @@
 package xsierra.radioyerevan.twitterbot;
 
-import xsierra.radioyerevan.cli.Joke;
+import xsierra.radioyerevan.jokeaccess.Joke;
 
 public interface JokeSender {
 

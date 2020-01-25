@@ -2,6 +2,8 @@ package xsierra.radioyerevan.cli;
 
 import xsierra.radioyerevan.cli.printer.ConsoleJokePrinter;
 import xsierra.radioyerevan.cli.printer.JokePrinter;
+import xsierra.radioyerevan.jokeaccess.JokeFinder;
+import xsierra.radioyerevan.postgres.RandomJokeFinder;
 
 public class RadioYerevanConsoleApplication {
 

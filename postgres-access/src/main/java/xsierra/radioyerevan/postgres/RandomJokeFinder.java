@@ -1,4 +1,7 @@
-package xsierra.radioyerevan.cli;
+package xsierra.radioyerevan.postgres;
+
+import xsierra.radioyerevan.jokeaccess.Joke;
+import xsierra.radioyerevan.jokeaccess.JokeFinder;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,10 +19,9 @@ public class RandomJokeFinder implements JokeFinder {
     private static final String COUNT_JOKES_BY_TIMES_USED_SQL = "SELECT COUNT(1) as jokes_count " +
             "FROM jokes WHERE times_used = ?";
     private static final String INCREASE_JOKE_SQL = "UPDATE jokes SET times_used = ? WHERE times_used = ? AND id = ?";
-    private static final String JOKES_BY_ID_SQL = "SELECT id, question, answer, times_used FROM jokes WHERE id = ?";
-    private static final String JOKE_MAX_USED = "SELECT MAX(times_used) as times_used FROM jokes;";
+    private static final String LESS_USED_JOKES = "SELECT MIN(times_used) as times_used FROM jokes;";
     private static final String JOKE_BY_OFFSET = "SELECT id, question, answer, times_used FROM jokes " +
-            "WHERE times_used < ? LIMIT 1 OFFSET ?";
+            "WHERE times_used = ? LIMIT 1 OFFSET ?";
 
     private final Random random = new Random();
 
@@ -27,13 +29,13 @@ public class RandomJokeFinder implements JokeFinder {
     public Joke findJoke() {
         try {
             int allJokesCount = getJokeCount();
-            int mostUsedTimes = getMostUsedJokes();
-            int mostUsingJokes = getJokeCount(mostUsedTimes);
+            int leastUsed = getLeastUsedJokes();
+            int leastUsedCount = getJokeCount(leastUsed);
 
-            if (allJokesCount == mostUsingJokes) {
-                return getRandomJoke(mostUsedTimes + 1, allJokesCount);
+            if (allJokesCount == leastUsedCount) {
+                return getRandomJoke(leastUsed, allJokesCount);
             } else {
-                return getRandomJoke(mostUsedTimes, (allJokesCount - mostUsingJokes));
+                return getRandomJoke(leastUsed, leastUsedCount);
             }
 
         } catch (Exception ex) {
@@ -84,8 +86,8 @@ public class RandomJokeFinder implements JokeFinder {
         }, timesUsed);
     }
 
-    public int getMostUsedJokes() throws SQLException {
-        return query(JOKE_MAX_USED, rs -> {
+    public int getLeastUsedJokes() throws SQLException {
+        return query(LESS_USED_JOKES, rs -> {
             try {
                 if (rs.next()) {
                     return rs.getInt("times_used");
@@ -98,26 +100,7 @@ public class RandomJokeFinder implements JokeFinder {
         });
     }
 
-    public Joke getJokeById(int id) throws SQLException {
-        return query(JOKES_BY_ID_SQL, rs -> {
-            try {
-                if (rs.next()) {
-                    Joke joke = new Joke();
-                    joke.setId(rs.getInt("id"));
-                    joke.setAnswer(rs.getString("answer"));
-                    joke.setQuestion(rs.getString("question"));
-                    joke.setTimesUsed(rs.getInt("times_used"));
-                    return joke;
-                } else {
-                    return null;
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }, id);
-    }
-
-    public Joke getRandomJoke(int topUsedJokes, int universeCount) throws SQLException {
+    public Joke getRandomJoke(int leastUsedJokesCount, int universeCount) throws SQLException {
         int offset = random.nextInt(universeCount);
         return query(JOKE_BY_OFFSET, rs -> {
             try {
@@ -134,7 +117,7 @@ public class RandomJokeFinder implements JokeFinder {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        }, topUsedJokes, offset);
+        }, leastUsedJokesCount, offset);
     }
 
     public <T> T query(String sql, Function<ResultSet, T> f, Object... params) throws SQLException {

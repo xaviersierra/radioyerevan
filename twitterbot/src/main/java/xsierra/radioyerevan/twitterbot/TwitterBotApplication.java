@@ -1,8 +1,8 @@
 package xsierra.radioyerevan.twitterbot;
 
-import xsierra.radioyerevan.cli.Joke;
-import xsierra.radioyerevan.cli.JokeFinder;
-import xsierra.radioyerevan.cli.RandomJokeFinder;
+import xsierra.radioyerevan.jokeaccess.Joke;
+import xsierra.radioyerevan.jokeaccess.JokeFinder;
+import xsierra.radioyerevan.postgres.RandomJokeFinder;
 
 import java.util.Optional;
 

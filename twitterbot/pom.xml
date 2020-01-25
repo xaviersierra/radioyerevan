@@ -5,7 +5,7 @@
     <parent>
         <artifactId>parent</artifactId>
         <groupId>xsierra.radioyerevan</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -39,8 +39,8 @@
     <dependencies>
         <dependency>
             <groupId>xsierra.radioyerevan</groupId>
-            <artifactId>cli</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <artifactId>postgres-access</artifactId>
+            <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

@@ -1,6 +1,7 @@
-package xsierra.radioyerevan.cli;
+package xsierra.radioyerevan.postgres;
 
 import org.junit.jupiter.api.Test;
+import xsierra.radioyerevan.jokeaccess.Joke;
 
 import java.sql.SQLException;
 import java.util.HashSet;
