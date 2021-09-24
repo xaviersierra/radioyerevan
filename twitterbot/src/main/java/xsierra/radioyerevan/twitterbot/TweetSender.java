@@ -9,19 +9,12 @@ import xsierra.radioyerevan.jokeaccess.Joke;
 
 public class TweetSender implements JokeSender {
 
+    public static final String CONSUMER_KEY = System.getenv("CONSUMER_KEY");
+    public static final String CONSUMER_SECRET = System.getenv("CONSUMER_SECRET");
+    public static final String ACCESS_TOKEN = System.getenv("ACCESS_TOKEN");
+    public static final String ACCESS_TOKEN_SECRET = System.getenv("ACCESS_TOKEN_SECRET");
+
     private static final String QUESTION_FORMAT = "Radio Yerevan were asked: %s";
-
-    private String apiKey;
-    private String apiSecret;
-    private String accessToken;
-    private String accessTokenSecret;
-
-    public TweetSender(String apiKey, String apiSecret, String accessToken, String accessTokenSecret) {
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.accessToken = accessToken;
-        this.accessTokenSecret = accessTokenSecret;
-    }
 
     @Override
     public void sendJoke(Joke joke) {
@@ -29,11 +22,23 @@ public class TweetSender implements JokeSender {
         try {
             ConfigurationBuilder cb = new ConfigurationBuilder();
             cb.setDebugEnabled(true)
-                    .setOAuthConsumerKey(apiKey)
-                    .setOAuthConsumerSecret(apiSecret)
-                    .setOAuthAccessToken(accessToken)
-                    .setOAuthAccessTokenSecret(accessTokenSecret);
+                    .setOAuthConsumerKey(CONSUMER_KEY)
+                    .setOAuthConsumerSecret(CONSUMER_SECRET)
+                    .setOAuthAccessToken(ACCESS_TOKEN)
+                    .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
 
+            if (CONSUMER_KEY == null || CONSUMER_KEY.isBlank() ){
+                System.out.println("Consumer key is null");
+            }
+            if (CONSUMER_SECRET == null || CONSUMER_SECRET.isBlank()){
+                System.out.println("Consumer secret is null");
+            }
+            if (ACCESS_TOKEN == null || ACCESS_TOKEN.isBlank()){
+                System.out.println("access token is null");
+            }
+            if (ACCESS_TOKEN_SECRET == null || ACCESS_TOKEN_SECRET.isBlank()){
+                System.out.println("access token secret is null");
+            }
             TwitterFactory tf = new TwitterFactory(cb.build());
             Twitter twitter = tf.getInstance();
             var questionStatus = twitter.updateStatus(String.format(QUESTION_FORMAT, joke.getQuestion()));
@@ -41,7 +46,7 @@ public class TweetSender implements JokeSender {
             var formattedAnswer = AnswerFormatter.formatAnswer(joke.getAnswer());
             long lastStatusId = questionStatus.getId();
 
-            for(String partialAnswer: formattedAnswer){
+            for (String partialAnswer : formattedAnswer) {
                 StatusUpdate answer = new StatusUpdate(partialAnswer);
                 answer.setInReplyToStatusId(lastStatusId);
                 var answerStatus = twitter.updateStatus(answer);
@@ -52,4 +57,5 @@ public class TweetSender implements JokeSender {
             throw new RuntimeException("Couldn't send tweet");
         }
     }
+
 }

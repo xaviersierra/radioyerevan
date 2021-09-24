@@ -12,9 +12,12 @@ import java.util.function.Function;
 
 public class RandomJokeFinder implements JokeFinder {
 
-    public static final String POSTGRES_URL = System.getenv("POSTGRES_URL");
-    public static final String USER = System.getenv("POSTGRES_USER");
-    public static final String PASSWORD = System.getenv("POSTGRES_PASSWORD");
+    private final DatabaseConfigurationLoader configurationLoader;
+
+    public RandomJokeFinder(DatabaseConfigurationLoader configurationLoader) {
+        this.configurationLoader = configurationLoader;
+    }
+
     private static final String COUNT_JOKES_SQL = "SELECT COUNT(1) as jokes_count FROM jokes";
     private static final String COUNT_JOKES_BY_TIMES_USED_SQL = "SELECT COUNT(1) as jokes_count " +
             "FROM jokes WHERE times_used = ?";
@@ -145,8 +148,13 @@ public class RandomJokeFinder implements JokeFinder {
     }
 
     public <T> T prepareStatement(String sql, Function<PreparedStatement, T> f, Object... params) throws SQLException {
+        var databaseConfiguration = configurationLoader.loadDatabaseConfiguration();
         try (var connection = DriverManager
-                .getConnection(POSTGRES_URL, USER, PASSWORD);
+                .getConnection(
+                        databaseConfiguration.getUrl(),
+                        databaseConfiguration.getUser(),
+                        databaseConfiguration.getPassword()
+                );
              var ps = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
             for (int i = 0; i < params.length; i++) {
@@ -157,7 +165,7 @@ public class RandomJokeFinder implements JokeFinder {
                 T result = f.apply(ps);
                 connection.commit();
                 return result;
-            } catch (SQLException ex){
+            } catch (SQLException ex) {
                 connection.rollback();
                 throw ex;
             }
