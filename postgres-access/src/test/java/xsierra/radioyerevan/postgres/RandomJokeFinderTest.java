@@ -1,8 +1,6 @@
 package xsierra.radioyerevan.postgres;
 
 import org.h2.tools.RunScript;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import xsierra.radioyerevan.jokeaccess.Joke;
 

@@ -6,8 +6,6 @@ import xsierra.radioyerevan.postgres.DatabaseConfigurationLoader;
 import xsierra.radioyerevan.postgres.EnvVarDatabaseConfigurationLoader;
 import xsierra.radioyerevan.postgres.RandomJokeFinder;
 
-import java.util.Optional;
-
 public class TwitterBotApplication {
 
     private static final DatabaseConfigurationLoader configurationLoader = new EnvVarDatabaseConfigurationLoader();
@@ -20,11 +18,6 @@ public class TwitterBotApplication {
         sender.sendJoke(joke);
         System.out.println("Tweet sent!");
         finder.useJoke(joke);
-    }
-
-    private static String getKey(String key){
-        return Optional.ofNullable(System.getenv(key))
-                .orElseThrow(() -> new IllegalArgumentException(key + " missing"));
     }
 
 }

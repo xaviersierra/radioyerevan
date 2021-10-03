@@ -2,6 +2,9 @@ package xsierra.radioyerevan.jokeaccess;
 
 public class Joke {
 
+    public static String QUESTION_FORMAT = "Radio Yerevan were asked: %s";
+    public static String ANSWER_FORMAT = "Radio Yerevan answered: %s";
+
     private int id;
 
     private String question;
