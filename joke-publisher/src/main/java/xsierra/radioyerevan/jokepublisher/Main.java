@@ -17,7 +17,6 @@ public class Main {
 
     private static final DatabaseConfigurationLoader CONFIGURATION_LOADER = new EnvVarDatabaseConfigurationLoader();
     private static final JokeFinder JOKE_FINDER = new RandomJokeFinder(CONFIGURATION_LOADER);
-    private static final JokePublisher JOKE_PUBLISHER = new ScheduledJokePublisher(JOKE_FINDER);
 
     private static final boolean TWITTER_PUBLISHER_ENABLED = Boolean.parseBoolean(
             System.getenv("TWITTER_PUBLISHER_ENABLED")
@@ -34,17 +33,22 @@ public class Main {
         List<JokeConsumer> consumers = new ArrayList<>();
 
         if (CONSOLE_PUBLISHER_ENABLED) {
-            consumers.add(new ConsoleSubscriber());
+            System.out.println("Adding console publisher");
+            JokeConsumerRegistry.addJokeConsumer(new ConsoleSubscriber());
+        } else {
+            System.out.println("Skipping console publisher");
         }
 
         if (TWITTER_PUBLISHER_ENABLED) {
-            consumers.add(new TwitterPublisher(new EnvTwitterConfigurationLoader()));
+            System.out.println("Adding twitter publisher");
+            JokeConsumerRegistry.addJokeConsumer(new TwitterPublisher(new EnvTwitterConfigurationLoader()));
+        } else {
+            System.out.println("Skipping twitter publisher");
         }
 
-        JokeChannel jokeChannel = new JokeChannel(JOKE_PUBLISHER, consumers);
-        jokeChannel.startChannel();
+        JokeConsumerRegistry.registerJokeFinder(JOKE_FINDER);
 
-        try (JokeScheduler ignored = new JokeScheduler(JOKE_PUBLISHER)) {
+        try (JokeScheduler ignored = new JokeScheduler()) {
             System.out.println("Joke Publisher running");
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 System.out.println("Gracefully shutting down...");

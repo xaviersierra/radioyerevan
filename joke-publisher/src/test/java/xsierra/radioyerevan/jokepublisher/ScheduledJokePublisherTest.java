@@ -16,18 +16,6 @@ class ScheduledJokePublisherTest {
 
     private Joke testJoke = new Joke();
 
-    ScheduledJokePublisher jokePublisher = new ScheduledJokePublisher(new JokeFinder() {
-        @Override
-        public Joke findJoke() {
-            return testJoke;
-        }
-
-        @Override
-        public void useJoke(Joke joke) {
-
-        }
-    });
-
     ScheduledJokePublisherTest() throws Exception {
     }
 
@@ -37,16 +25,32 @@ class ScheduledJokePublisherTest {
 
         AtomicBoolean subscriberCalled = new AtomicBoolean(false);
         AtomicReference<Joke> atomicJoke = new AtomicReference<>(null);
-        jokePublisher.subscribe(joke -> {
+        JokeConsumerRegistry.addJokeConsumer(joke -> {
             subscriberCalled.set(true);
             atomicJoke.set(joke);
         });
+
+        JokeConsumerRegistry.registerJokeFinder(new JokeFinder() {
+            @Override
+            public Joke findJoke() {
+                return testJoke;
+            }
+
+            @Override
+            public void useJoke(Joke joke) {
+
+            }
+        });
+
+        ScheduledJokePublisher jokePublisher = new ScheduledJokePublisher();
 
         jokePublisher.publishJoke();
 
         assertTrue(subscriberCalled.get(), "Subscriber should have been called");
 
         assertSame(testJoke, atomicJoke.get(), "Received joke should be the same as the testJoke");
+
+        JokeConsumerRegistry.clear();
     }
 
 }

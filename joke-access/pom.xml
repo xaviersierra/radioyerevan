@@ -11,5 +11,8 @@
 
     <artifactId>joke-access</artifactId>
 
+    <build>
+        <finalName>joke-publisher</finalName>
+    </build>
 
 </project>

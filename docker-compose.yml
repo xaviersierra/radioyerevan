@@ -1,0 +1,31 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  postgres:
+    image: postgres:13-alpine3.14
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - $PWD/tmp/data:/var/lib/postgresql/data/pgdata
+  migrator:
+    image: radioyerevan/postgres-migrator:1.0-SNAPSHOT
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  publisher:
+    image: radioyerevan/joke-publisher:1.0-SNAPSHOT
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      CONSOLE_PUBLISHER_ENABLED: "true"
+      TWITTER_PUBLISHER_ENABLED: "false"
+      PUBLISHER_CRON: "0 0/2 * ? * * *"
