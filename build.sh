@@ -13,11 +13,6 @@ docker build \
   -t "xavsierra/radioyerevan-pg-migrator:dev" \
   -f postgres-migrator/src/main/docker/Dockerfile \
   .
-echo "Building postgres migrator arm64 docker image"
-docker buildx build --platform linux/arm64 \
-  -t "xavsierra/radioyerevan-pg-migrator:dev" \
-  -f postgres-migrator/src/main/docker/Dockerfile \
-  .
 
 echo "Building joke publisher docker image"
 docker build \
@@ -25,8 +20,3 @@ docker build \
   -f joke-publisher/src/main/docker/Dockerfile \
   .
 
-echo "Building joke publisher docker arm64 image"
-docker buildx build --platform linux/arm64 \
-  -t "xavsierra/joke-publisher:dev" \
-  -f joke-publisher/src/main/docker/Dockerfile \
-  .
