@@ -21,7 +21,7 @@ public class JokeScheduler implements AutoCloseable {
             scheduler.start();
             init();
         } catch (SchedulerException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

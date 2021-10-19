@@ -15,7 +15,8 @@ public class YerevanMigrator {
     public static void main(String[] args) throws InterruptedException {
 
         Flyway flyway = Flyway.configure().dataSource(POSTGRES_URL, USER, PASSWORD)
-                .locations("migrations").load();
+                .locations("filesystem:/app/migrations/*.sql")
+                .load();
 
         while (true) {
             try {
@@ -25,13 +26,13 @@ public class YerevanMigrator {
             } catch (FlywaySqlException fe) {
                 if (fe.getCause() instanceof PSQLException) {
                     PSQLException psqlEx = (PSQLException) fe.getCause();
-                    if (psqlEx.getCause() instanceof ConnectException){
+                    if (psqlEx.getCause() instanceof ConnectException) {
                         System.err.println("Could not connect to database. Retrying in 15 seconds...");
                         Thread.sleep(15000);
                     } else {
                         System.err.println("Database initialization failed, cause: " + psqlEx.getCause());
                         psqlEx.printStackTrace();
-                        System.exit(1);
+                        Thread.sleep(15000);
                     }
                 } else {
                     System.err.println("Flyway failed with the following message: " + fe.getMessage());

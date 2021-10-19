@@ -10,7 +10,7 @@ services:
     volumes:
       - $PWD/tmp/data:/var/lib/postgresql/data/pgdata
   migrator:
-    image: radioyerevan/postgres-migrator:1.0-SNAPSHOT
+    image: xavsierra/radioyerevan-pg-migrator:dev
     depends_on:
       - postgres
     environment:
@@ -19,7 +19,7 @@ services:
       POSTGRES_PASSWORD: postgres
 
   publisher:
-    image: radioyerevan/joke-publisher:1.0-SNAPSHOT
+    image: xavsierra/radioyerevan-joke-publisher:dev
     depends_on:
       - postgres
     environment:
@@ -28,4 +28,8 @@ services:
       POSTGRES_PASSWORD: postgres
       CONSOLE_PUBLISHER_ENABLED: "true"
       TWITTER_PUBLISHER_ENABLED: "false"
+      CONSUMER_KEY: fake_consumer_key
+      CONSUMER_SECRET: fake_consumer_secret
+      ACCESS_TOKEN: fake_access_token
+      ACCESS_TOKEN_SECRET: fake_access_token_secret
       PUBLISHER_CRON: "0 0/2 * ? * * *"

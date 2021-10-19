@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>cli</module>
-        <module>twitterbot</module>
         <module>postgres-migrator</module>
         <module>joke-access</module>
         <module>postgres-access</module>
@@ -13,6 +12,7 @@
     </modules>
     <properties>
         <revision>1.0-SNAPSHOT</revision>
+        <graalvm.version>21.2.0</graalvm.version>
         <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>

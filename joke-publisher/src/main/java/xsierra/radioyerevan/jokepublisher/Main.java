@@ -1,19 +1,19 @@
 package xsierra.radioyerevan.jokepublisher;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import xsierra.radioyerevan.jokeaccess.JokeFinder;
 import xsierra.radioyerevan.jokepublisher.console.ConsoleSubscriber;
 import xsierra.radioyerevan.jokepublisher.schedule.JokeScheduler;
-import xsierra.radioyerevan.jokepublisher.schedule.ScheduledJokePublisher;
 import xsierra.radioyerevan.jokepublisher.twitter.EnvTwitterConfigurationLoader;
 import xsierra.radioyerevan.jokepublisher.twitter.TwitterPublisher;
 import xsierra.radioyerevan.postgres.DatabaseConfigurationLoader;
 import xsierra.radioyerevan.postgres.EnvVarDatabaseConfigurationLoader;
 import xsierra.radioyerevan.postgres.RandomJokeFinder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private static final DatabaseConfigurationLoader CONFIGURATION_LOADER = new EnvVarDatabaseConfigurationLoader();
     private static final JokeFinder JOKE_FINDER = new RandomJokeFinder(CONFIGURATION_LOADER);
@@ -30,36 +30,33 @@ public class Main {
 
     public static void main(String... args) {
 
-        List<JokeConsumer> consumers = new ArrayList<>();
-
         if (CONSOLE_PUBLISHER_ENABLED) {
-            System.out.println("Adding console publisher");
+            LOG.info("Adding console publisher");
             JokeConsumerRegistry.addJokeConsumer(new ConsoleSubscriber());
         } else {
-            System.out.println("Skipping console publisher");
+            LOG.info("Skipping console publisher");
         }
 
         if (TWITTER_PUBLISHER_ENABLED) {
-            System.out.println("Adding twitter publisher");
+            LOG.info("Adding twitter publisher");
             JokeConsumerRegistry.addJokeConsumer(new TwitterPublisher(new EnvTwitterConfigurationLoader()));
         } else {
-            System.out.println("Skipping twitter publisher");
+            LOG.info("Skipping twitter publisher");
         }
 
         JokeConsumerRegistry.registerJokeFinder(JOKE_FINDER);
 
         try (JokeScheduler ignored = new JokeScheduler()) {
-            System.out.println("Joke Publisher running");
+            LOG.info("Joke Publisher running");
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                System.out.println("Gracefully shutting down...");
+                LOG.info("Gracefully shutting down...");
                 shutdownSignal = true;
             }));
             while (!shutdownSignal) {
                 Thread.sleep(100);
             }
         } catch (Exception ex) {
-            System.err.println("Joke scheduler failed");
-            ex.printStackTrace();
+            LOG.error("Joke scheduler failed", ex);
         }
 
     }
