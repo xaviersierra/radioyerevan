@@ -25,7 +25,7 @@ while getopts "$optspec" optchar; do
   esac
 done
 echo "Building native image builder"
-docker build --no-cache -t radio-yerevan-builder .
+docker build -t radio-yerevan-builder .
 echo "Compiling radioyerevan version $RADIO_YEREVAN_VERSION"
 docker run --rm -v "$SOURCE_PATH:/radioyerevan" radio-yerevan-builder mvn clean package
 

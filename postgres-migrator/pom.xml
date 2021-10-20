@@ -75,6 +75,7 @@
                         -H:+StaticExecutableWithDynamicLibC
                         --allow-incomplete-classpath
                         --no-fallback
+                        -J-Xmx1g
                     </buildArgs>
                 </configuration>
             </plugin>
