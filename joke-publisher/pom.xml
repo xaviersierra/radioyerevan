@@ -71,10 +71,9 @@
                         -H:IncludeResources='.*/quartz.properties$'
                         -H:IncludeResources='.*/log4j.properties$'
                         -H:ReflectionConfigurationFiles=resources/reflection_config.json
+                        -H:+StaticExecutableWithDynamicLibC
                         --initialize-at-build-time=org.postgresql.PGProperty
                         --enable-url-protocols=https
-                        --static
-                        --libc=musl
                         --allow-incomplete-classpath
                         --no-fallback
                     </buildArgs>

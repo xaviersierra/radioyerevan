@@ -72,8 +72,7 @@
                         -H:IncludeResources=org/flywaydb/core/internal/version.txt
                         --initialize-at-build-time=org.postgresql.PGProperty
                         --enable-url-protocols=https
-                        --static
-                        --libc=musl
+                        -H:+StaticExecutableWithDynamicLibC
                         --allow-incomplete-classpath
                         --no-fallback
                     </buildArgs>
