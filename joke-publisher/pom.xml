@@ -76,7 +76,7 @@
                         --enable-url-protocols=https
                         --allow-incomplete-classpath
                         --no-fallback
-                        -J-Xmx1500m
+                        -J-Xmx2000m
                     </buildArgs>
                 </configuration>
             </plugin>
