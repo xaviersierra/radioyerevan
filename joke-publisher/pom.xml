@@ -14,24 +14,22 @@
     <build>
         <finalName>joke-publisher</finalName>
         <plugins>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/resources</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
@@ -49,35 +47,6 @@
                             <mainClass>xsierra.radioyerevan.jokepublisher.Main</mainClass>
                         </manifest>
                     </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.graalvm.nativeimage</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
-                <version>${graalvm.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>native-image</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>false</skip>
-                    <imageName>publisher</imageName>
-                    <buildArgs>
-                        -H:+ReportExceptionStackTraces
-                        -H:IncludeResources='.*/quartz.properties$'
-                        -H:IncludeResources='.*/log4j.properties$'
-                        -H:ReflectionConfigurationFiles=resources/reflection_config.json
-                        -H:+StaticExecutableWithDynamicLibC
-                        --initialize-at-build-time=org.postgresql.PGProperty
-                        --enable-url-protocols=https
-                        --allow-incomplete-classpath
-                        --no-fallback
-                        -J-Xmx2000m
-                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
@@ -101,7 +70,7 @@
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
+        <artifactId>postgresql</artifactId>
             <version>${postgresql-jdbc.version}</version>
         </dependency>
         <dependency>

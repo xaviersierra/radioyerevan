@@ -15,23 +15,21 @@
         <finalName>postgres-migrator</finalName>
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/resources</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
@@ -49,34 +47,6 @@
                             <mainClass>xsierra.radioyerevan.databasemigrator.YerevanMigrator</mainClass>
                         </manifest>
                     </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.graalvm.nativeimage</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
-                <version>${graalvm.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>native-image</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>false</skip>
-                    <imageName>migrator</imageName>
-                    <buildArgs>
-                        -H:+ReportExceptionStackTraces
-                        -H:ReflectionConfigurationFiles=resources/reflection_config.json
-                        -H:IncludeResources=org/flywaydb/core/internal/version.txt
-                        --initialize-at-build-time=org.postgresql.PGProperty
-                        --enable-url-protocols=https
-                        -H:+StaticExecutableWithDynamicLibC
-                        --allow-incomplete-classpath
-                        --no-fallback
-                        -J-Xmx2g
-                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>

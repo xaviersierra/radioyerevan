@@ -14,9 +14,7 @@ public class YerevanMigrator {
 
     public static void main(String[] args) throws InterruptedException {
 
-        Flyway flyway = Flyway.configure().dataSource(POSTGRES_URL, USER, PASSWORD)
-                .locations("filesystem:/app/migrations/*.sql")
-                .load();
+        Flyway flyway = Flyway.configure().dataSource(POSTGRES_URL, USER, PASSWORD).locations("migrations").load();
 
         while (true) {
             try {

@@ -24,20 +24,19 @@ while getopts "$optspec" optchar; do
       ;;
   esac
 done
-echo "Building native image builder"
-docker build -t radio-yerevan-builder .
-echo "Compiling radioyerevan version $RADIO_YEREVAN_VERSION"
-docker run --rm -v "$SOURCE_PATH:/radioyerevan" radio-yerevan-builder mvn clean package
+echo "Packaging radio yerevan"
 
-echo "Building postgres migrator docker image"
-docker build \
+mvn clean package
+# docker buildx build --platform linux/amd64,linux/arm64 -t xavsierra/radio-yerevan-builder --push .
+
+echo "Building postgres migrator image"
+docker buildx build --platform linux/amd64,linux/arm64 \
   -t "xavsierra/radioyerevan-pg-migrator:dev" \
   -f postgres-migrator/src/main/docker/Dockerfile \
-  .
+  --push .
 
 echo "Building joke publisher docker image"
-docker build \
+docker buildx build --platform linux/amd64,linux/arm64 \
   -t "xavsierra/radioyerevan-joke-publisher:dev" \
   -f joke-publisher/src/main/docker/Dockerfile \
-  .
-
+  --push .
